@@ -1,5 +1,5 @@
 import os, sys
-module_path = os.path.abspath(os.path.join('backend'))
+module_path = os.path.abspath(os.path.join('.'))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 import uvicorn
 
 
-from ml_pipeline import classify
+from backend.ml_pipeline import classify, recommend
 
 
 config = dotenv_values(".env")
@@ -33,23 +33,34 @@ def read_root():
 async def main():
     content = """
 <body>
-<form action="/upload/" enctype="multipart/form-data" method="post">
-<input name="image" type="file">
-<input type="submit">
-</form>
+    <form action="/upload/" enctype="multipart/form-data" method="post">
+        <input name="image" type="file">
+        <input type="submit">
+    </form>
 </body>
     """
     return HTMLResponse(content=content)
 
 
 @app.post("/upload/")
-async def upload_image(file: UploadFile):
-    image, species = classify(file,"models/clf-cnn")
-    recommendation = None  # TOOD: Implement this
+async def upload_image(image: UploadFile):
+    root_dir = os.path.dirname(os.path.realpath(__file__))
+    
+    image_binary, species = classify(
+        image,
+        os.path.join(root_dir, "models/clf-cnn")
+    )
+    recommendations = recommend(
+        image, 10,
+        os.path.join(root_dir, "data/recommender-database.csv"),
+        os.path.join(root_dir, "models/clf-cnn"),
+        os.path.join(root_dir, "models/fe-cnn"),
+        os.path.join(root_dir, "models/clu-kmeans")
+    )
     
     return {
-        "filename": file.filename,
-        "species": species
+        "species": species,
+        "recommendations": recommendations
     }
 
 

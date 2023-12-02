@@ -3,10 +3,10 @@ from PIL import Image
 
 
 def remove_transparency(image: Image) -> Image:
-    if image.mode in ('RGBA', 'RGBa', 'LA', 'La', 'PA', 'P'):
-        if image.mode != 'RGBA':
-            image = image.convert('RGBA')
-        image = image.convert('RGB')
+    if image.mode in ("RGBA", "RGBa", "LA", "La", "PA", "P"):
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+        image = image.convert("RGB")
     return image
 
 

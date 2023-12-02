@@ -8,9 +8,9 @@ from PIL import Image
 from fastapi import UploadFile
 
 
-from util import TARGET_IMG_SIZE
-from util import CLASS_LABELS
-import util.input_processing as input_manip
+from backend.util import TARGET_IMG_SIZE
+from backend.util import CLASS_LABELS
+import backend.util.input_processing as input_manip
 
 
 def classify(
@@ -48,7 +48,7 @@ def classify(
 
 
 def recommend(
-        ref_path: str,
+        ref_image: UploadFile,
         num_recommendations: int,
         data_path: str,
         clf_path: str,
@@ -74,7 +74,7 @@ def recommend(
     clu = joblib.load(clu_path)
     clu.set_params(n_clusters=int(np.sqrt(len(df_rec) / num_recommendations)))
 
-    ref_processed, ref_class = classify(ref_path, classifier_path=clf_path, return_original=False, verbose=False)
+    ref_processed, ref_class = classify(ref_image, classifier_path=clf_path, return_original=False, verbose=False)
     recommendations = df_rec[df_rec['Class'] == ref_class]
 
     # Extract reference image feature vector
