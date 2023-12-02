@@ -1,4 +1,4 @@
-# BloomSage Machine Learning & MLOps Backend Component
+# BloomSage ML Pipeline Demo
 
 **REQUIRED PYTHON VERSION: 3.10**
 
