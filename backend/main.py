@@ -29,19 +29,6 @@ def read_root():
     }
 
 
-@app.get("/upload/")
-async def main():
-    content = """
-<body>
-    <form action="/upload/" enctype="multipart/form-data" method="post">
-        <input name="image" type="file">
-        <input type="submit">
-    </form>
-</body>
-    """
-    return HTMLResponse(content=content)
-
-
 @app.post("/upload/")
 async def upload_image(image: UploadFile):
     root_dir = os.path.dirname(os.path.realpath(__file__))
