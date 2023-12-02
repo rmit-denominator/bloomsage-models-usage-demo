@@ -1,10 +1,15 @@
+import os, sys
+module_path = os.path.abspath(os.path.join('backend'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
 from dotenv import dotenv_values
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import HTMLResponse
 import uvicorn
 
 
-from backend.ml_pipeline import classify
+from ml_pipeline import classify
 
 
 config = dotenv_values(".env")
@@ -24,17 +29,6 @@ def read_root():
     }
 
 
-@app.post("/upload/")
-async def create_upload_file(file: UploadFile):
-    image, species = classify(file,"models/clf-cnn")
-    recommendation = None  # TOOD: Implement this
-    
-    return {
-        "filename": file.filename,
-        "species": species
-    }
-
-
 @app.get("/upload/")
 async def main():
     content = """
@@ -48,6 +42,16 @@ async def main():
     return HTMLResponse(content=content)
 
 
-def start():
-    """Launched with `poetry run start` at root level"""
-    uvicorn.run("backend.main:app", host=HOST, port=PORT, reload=True)
+@app.post("/upload/")
+async def upload_image(file: UploadFile):
+    image, species = classify(file,"models/clf-cnn")
+    recommendation = None  # TOOD: Implement this
+    
+    return {
+        "filename": file.filename,
+        "species": species
+    }
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
