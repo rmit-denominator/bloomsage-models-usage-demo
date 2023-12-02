@@ -12,7 +12,6 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
 
 ---
 
-
 ## Project Structure
 
     .
@@ -21,7 +20,6 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
     │   │   ├── util/
     │   │   │   ├── input_processing.py
     │   │   │   └── __init__.py
-    │   │   ├── ml_pipeline.py
     │   │   ├── ml_pipeline.py
     │   │   └── __init__.py
     │   ├── .env
@@ -37,14 +35,12 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
     ├── .gitignore
     └── README.md
 
-
 These folders will be created during ML assets fetching:
 
 1. `backend/data/`: This folder contains the compiled and compressed recommender database.
 2. `backend/models/`: This folder contains trained models.
 
 ---
-
 
 ## Getting Started 🚀
 
@@ -56,50 +52,49 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
 
 ### Setup Development Environment and fetch ML Assets (Compiled recommender database and trained models from [BloomSage ML Repository Latest Release](https://github.com/rmit-denominator/bloomsage-ml/releases/latest)):
 
-
 #### Backend Setup:
 
 From the project root directory:
 
 - POSIX Systems:
-    ```bash
-    cd backend
-    python -m venv .venv
-    source .venv/bin/activate
-    pip install -r ./requirements.txt
-    python ./ml_fetch.py
-    deactivate
-    ```
+  ```bash
+  cd backend
+  python -m venv .venv
+  source .venv/bin/activate
+  pip install -r ./requirements.txt
+  python ./ml_fetch.py
+  deactivate
+  ```
 - Windows Systems:
-    ```bash
-    cd backend
-    python -m venv venv
-    venv/Script/activate
-    pip install -r ./requirements.txt
-    python ./ml_fetch.py
-    deactivate
-    ```
+  ```bash
+  cd backend
+  python -m venv venv
+  venv/Script/activate
+  pip install -r ./requirements.txt
+  python ./ml_fetch.py
+  deactivate
+  ```
 
 #### Frontend Setup:
 
 From the project root directory:
 
 - POSIX Systems:
-    ```bash
-    cd frontend
-    python -m venv .venv
-    source .venv/bin/activate
-    pip install -r ./requirements.txt
-    deactivate
-    ```
+  ```bash
+  cd frontend
+  python -m venv .venv
+  source .venv/bin/activate
+  pip install -r ./requirements.txt
+  deactivate
+  ```
 - Windows Systems:
-    ```bash
-    cd frontend
-    python -m venv venv
-    venv/Script/activate
-    pip install -r ./requirements.txt
-    deactivate
-    ```
+  ```bash
+  cd frontend
+  python -m venv venv
+  venv/Script/activate
+  pip install -r ./requirements.txt
+  deactivate
+  ```
 
 Refer to `backend/requirements.txt` and `frontend/requirements.txt` for information on project dependencies.
 
@@ -112,34 +107,34 @@ Refer to `backend/requirements.txt` and `frontend/requirements.txt` for informat
 From the project root directory:
 
 - POSIX Systems:
-    ```bash
-    cd backend
-    source .venv/bin/activate
-    python ./main.py
-    ```
+  ```bash
+  cd backend
+  source .venv/bin/activate
+  python ./main.py
+  ```
 - Windows Systems:
-    ```bash
-    cd backend
-    venv/Script/activate
-    python ./main.py
-    ```
+  ```bash
+  cd backend
+  venv/Script/activate
+  python ./main.py
+  ```
 
 #### Frontend:
 
 From the project root directory:
 
 - POSIX Systems:
-    ```bash
-    cd frontend
-    source .venv/bin/activate
-    streamlit run ./main.py
-    ```
+  ```bash
+  cd frontend
+  source .venv/bin/activate
+  streamlit run ./main.py
+  ```
 - Windows Systems:
-    ```bash
-    cd frontend
-    venv/Script/activate
-    streamlit run ./main.py
-    ```
+  ```bash
+  cd frontend
+  venv/Script/activate
+  streamlit run ./main.py
+  ```
 
 After this, the backend server will be available on [http://localhost:8000](http://localhost:8000/), and the frontend server will be available on [http://localhost:8080](http://localhost:8080).
 
