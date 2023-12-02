@@ -5,6 +5,7 @@ import tensorflow as tf
 from keras.engine.training import Model
 from sklearn.metrics.pairwise import cosine_similarity
 from PIL import Image
+from fastapi import UploadFile
 
 
 from util import TARGET_IMG_SIZE
@@ -13,7 +14,7 @@ import util.input_processing as input_manip
 
 
 def classify(
-    image_path: str,
+    image: UploadFile,
     classifier_path: str,
     verbose: bool = False,
     return_original: bool = True
@@ -28,7 +29,7 @@ def classify(
     :return: The original/processed image (PIL.image) and its classification (str).
     """
 
-    im_original = Image.open(image_path)
+    im_original = Image.open(image.file)
     im_processed = input_manip.remove_transparency(im_original)
     im_processed = input_manip.resize_crop(im_processed, TARGET_IMG_SIZE, TARGET_IMG_SIZE)
     im_processed = input_manip.normalize_pixels(im_processed)
