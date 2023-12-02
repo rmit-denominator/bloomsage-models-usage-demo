@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks,jetbrains+all,visualstudiocode,visualstudio,vim,emacs,venv,dotenv,windows,linux,macos
 
 ### dotenv ###
-.env
+# .env  # Enable this for production
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
