@@ -18,6 +18,14 @@ if uploaded_file is not None:
     if response.status_code == 200:
         result = response.json()
         st.write("Species:", result["species"])
-        st.write("Recommendations:", result["recommendations"])
+        # Assuming result["recommendations"] is a list of image paths
+        image_paths = result["recommendations"]
+
+        # Prepend the server URL to the image paths
+        server_url = "http://localhost:8000/images/"
+        full_image_urls = [server_url + path for path in image_paths]
+
+        # Display the images
+        st.image(full_image_urls)
     else:
         st.error("Failed to receive a valid response.")

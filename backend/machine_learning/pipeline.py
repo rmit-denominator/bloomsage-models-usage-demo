@@ -8,9 +8,9 @@ from PIL import Image
 from fastapi import UploadFile
 
 
-from backend.util import TARGET_IMG_SIZE
-from backend.util import CLASS_LABELS
-import backend.util.input_processing as input_manip
+from machine_learning.util import TARGET_IMG_SIZE
+from machine_learning.util import CLASS_LABELS
+import machine_learning.util.input_processing as input_manip
 
 
 def classify(

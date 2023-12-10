@@ -6,10 +6,11 @@ if module_path not in sys.path:
 from dotenv import dotenv_values
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 import uvicorn
 
-
-from backend.ml_pipeline import classify, recommend
+from machine_learning.pipeline import classify, recommend
 
 
 config = dotenv_values(".env")
@@ -19,6 +20,7 @@ PORT = int(config["PORT"])
 
 app = FastAPI()
 
+app.mount("/images", StaticFiles(directory="data/recommender-database"), name="images")
 
 @app.get("/")
 def read_root():
