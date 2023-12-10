@@ -16,11 +16,11 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
 
     .
     ├── backend/
-    │   ├── backend/
+    │   ├── machine_learning/
     │   │   ├── util/
     │   │   │   ├── input_processing.py
     │   │   │   └── __init__.py
-    │   │   ├── ml_pipeline.py
+    │   │   ├── pipeline.py
     │   │   └── __init__.py
     │   ├── .env
     │   ├── requirements.txt
