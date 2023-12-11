@@ -44,38 +44,41 @@ def show_upload_archive():
     uploaded_files = st.file_uploader("Upload your flower images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
     if uploaded_files is not None:
         for uploaded_file in uploaded_files:
-            image = Image.open(uploaded_file)
-            st.image(image, caption="Uploaded image", use_column_width=True)
+            try:
+                image = Image.open(uploaded_file)
+                st.image(image, caption="Uploaded image", use_column_width=True)
 
-            image_details = get_image_details(image)
-            st.write("Image details:")
-            st.write(image_details)
+                image_details = get_image_details(image)
+                st.write("Image details:")
+                st.write(image_details)
 
-            files = {"image": uploaded_file}
+                files = {"image": uploaded_file}
 
-            response = requests.post(BACKEND_URI, files=files)
-                
-            if response.status_code == 200:
-                result = response.json()
-                st.write("Species:", result["species"])
-                # Assuming result["recommendations"] is a list of image paths
-                image_paths = result["recommendations"]
+                response = requests.post(BACKEND_URI, files=files)
 
-                # Prepend the server URL to the image paths
-                server_url = "http://localhost:8000/images/"
-                full_image_urls = [server_url + path for path in image_paths]
+                if response.status_code == 200:
+                    result = response.json()
+                    st.write("Species:", result["species"])
+                    # Assuming result["recommendations"] is a list of image paths
+                    image_paths = result["recommendations"]
 
-                # Display the images
-                st.image(full_image_urls)
-            else:
-                st.error("Failed to receive a valid response.")
+                    # Prepend the server URL to the image paths
+                    server_url = "http://localhost:8000/images/"
+                    full_image_urls = [server_url + path for path in image_paths]
 
-            if st.button("Archive image", key=idx):
-                archive_image_mongodb(image, image_details, result=result["species"])
-                st.success("Image archived successfully!")
+                    # Display the images
+                    st.image(full_image_urls)
+                else:
+                    st.error("Failed to receive a valid response.")
 
-            st.success("File uploaded successfully!")
-           
+                if st.button("Archive image", key=idx):
+                    archive_image_mongodb(image, image_details, result=result.get("species"))
+                    st.success("Image archived successfully!")
+
+                st.success("File uploaded successfully!")
+
+            except Exception as e:
+                st.error(f"Error processing image: {str(e)}")
             idx += 1
 
  
