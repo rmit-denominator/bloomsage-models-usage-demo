@@ -100,7 +100,7 @@ def show_view_archive():
     archived_images = collection.find({})
     for archived_image in archived_images:
         st.image(BytesIO(archived_image["image"]), caption=f"Size - {archived_image['size in mb']} MB", use_column_width=True)
-        st.write(archived_image["result"])
+        st.write(f"Flower Species: {archived_image['result']}")
         if st.button(f"Delete Image - {archived_image['size in mb']} MB",
                     key=archived_image['_id']):
             delete_image_mongodb(archived_image['_id'])
