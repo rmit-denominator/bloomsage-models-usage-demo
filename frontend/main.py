@@ -150,5 +150,6 @@ def get_image_details(image):
 def delete_image_mongodb(image_id):
     collection.delete_one({"_id": image_id})
 
+
 if __name__ == '__main__':
     main()
