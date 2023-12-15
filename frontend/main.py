@@ -24,6 +24,7 @@ collection = db["test"]
 
 
 def main():
+    st.set_page_config(page_title='BloomSage', page_icon='Logo_BloomSage Logomark.ico', initial_sidebar_state='collapsed')
     st.title("BloomSage")
 
     menu = ["Home", "Upload & Archive", "View Archive"]
