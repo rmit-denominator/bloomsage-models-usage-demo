@@ -54,7 +54,7 @@ def recommend(
         clf_path: str,
         fe_path: str,
         clu_path: str,
-) -> list:
+) -> dict:
     """
     Recommends similar images based on a reference image.
 
@@ -64,7 +64,7 @@ def recommend(
     :param clf_path: Path to the classifier model file.
     :param fe_path: Path to the feature extraction model file.
     :param clu_path: Path to the clustering model file.
-    :return: List of paths to the recommended images.
+    :return: Dictionary containing paths to recommended images as keys and their cosine similarity scores as values.
     """
     if num_recommendations < 1:
         raise ValueError('Number of recommendations cannot be smaller than 1.')
@@ -103,4 +103,11 @@ def recommend(
     top_ref_cluster_indices = sorted_ref_cluster_indices[:num_recommendations]
     recommendations = recommendations.iloc[top_ref_cluster_indices]
 
-    return list(recommendations['ImgPath'].values)
+    # Retrieve paths and cosine similarities
+    recommended_paths = recommendations['ImgPath'].tolist()
+    cosine_sim_scores = cosine_similarities[0, top_ref_cluster_indices].tolist()
+
+    # Create a dictionary with paths and their cosine similarity scores
+    result_dict = { path: score for path, score in zip(recommended_paths, cosine_sim_scores) }
+
+    return result_dict
