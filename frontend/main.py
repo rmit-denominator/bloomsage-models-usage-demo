@@ -1,149 +1,96 @@
-import requests
 import streamlit as st
-import os
-import imghdr
-import shutil
-import tempfile
-import pymongo
-from io import BytesIO
-from dotenv import dotenv_values, load_dotenv
-
-
-load_dotenv()
-
-
-config = dotenv_values(".env")
-BACKEND_URI = config["BACKEND"]
-MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
-
-
-# Connect to MongoDB
-client = pymongo.MongoClient(f"mongodb+srv://admin:{MONGODB_PASSWORD}@cluster0.zuy7zeb.mongodb.net/")
-db = client["testdb"]
-collection = db["test"]
-
+import streamlit_authenticator as stauth
+import base64
+from features import fetch_users, menu
 
 def main():
-    st.set_page_config(page_title='BloomSage', page_icon='Logo_BloomSage Logomark.ico', initial_sidebar_state='collapsed')
-    st.title("BloomSage")
+    st.set_page_config(page_title='BloomSage', page_icon="favicon/Logo_BloomSage Logomark.png")
+    LOGO_IMAGE = "favicon/Logo_BloomSage Logomark.png"
+    placeholder = st.empty()
+    with placeholder.container():
+        st.markdown(
+            """
+            <style>
+            .container {
+                display: flex;
+            }
+            .logo-text {
+                font-weight:700 !important;
+                font-size:50px !important;
+                color: #f0000 !important;
+                padding-top: 75px !important;
+            }
+            .logo-img {
+                float:right;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
-    menu = ["Home", "Upload & Archive", "View Archive"]
-    option = st.sidebar.selectbox("Menu", menu)
-    if option == "Home":
-        show_home()
-    elif option == "Upload & Archive":
-        show_upload_archive()
-    elif option == "View Archive":
-        show_view_archive()
+        st.markdown(
+            f"""
+            <div class="container">
+                <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}" width=150">
+                <h1 class="logo-text">BloomSage</h1>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )   
+        st.header("Welcome to our Application!👋")
+    try:
+        users = fetch_users()
+        emails = []
+        usernames = []
+        passwords = []
 
+        for user in users:
+            emails.append(user['key'])
+            usernames.append(user['username'])
+            passwords.append(user['password'])
 
-def show_home():
-    st.write("Demo Upload and save image with streamlit, Use the navigation bar to select!")
+        credentials = {'usernames': {}}
+        for index in range(len(emails)):
+            credentials['usernames'][usernames[index]] = {'name': emails[index], 'password': passwords[index]}
 
+        Authenticator = stauth.Authenticate(credentials, cookie_name='bloomSage', key='12345', cookie_expiry_days=1)
 
-def show_upload_archive():
-    st.header("Upload & Archive")
-    idx = 0
+        email, authentication_status, username = Authenticator.login(':green[Login]', 'sidebar')
+ 
+        info, info1 = st.columns(2)
 
-    uploaded_files = st.file_uploader("Upload your flower images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
-    if uploaded_files is not None:
-        for uploaded_file in uploaded_files:
-            try:
-                # Create a temporary folder
-                temp_folder = tempfile.mkdtemp()
+        if authentication_status is None:
+            with info:
+                menu(None, authentication_status, None)
 
-                # Save the content of the uploaded file to a temporary file
-                temp_image_path = os.path.join(temp_folder, "temp_image.png")
-                with open(temp_image_path, "wb") as temp_file:
-                    temp_file.write(uploaded_file.read())
-                st.image(uploaded_file, caption="Uploaded image", use_column_width=True)
+        if username:
+            if username in usernames:
+                if authentication_status:
+                    # let User see app
+                    # Retrieve the email of the authenticated user
+                    authenticated_user_email = credentials['usernames'][username]['name']
+                    
+                    st.sidebar.subheader(f'Welcome {username}')
+                    Authenticator.logout('Log Out', 'sidebar')
 
-                image_details = get_image_details(temp_image_path)
-                st.write("Image details:")
-                st.write(image_details)
+                    menu(authenticated_user_email, authentication_status, placeholder)
 
-                files = {"image": uploaded_file}
+                elif not authentication_status:
+                    with info:
+                        st.sidebar.error('Incorrect Password or username')
+                        menu(None, authentication_status, None)
+                elif authentication_status is None:
+                    with info:
+                        st.sidebar.warning('Please feed in your credentials')
+                        menu(None, authentication_status, None)
+            else:
+                with info:
+                    st.sidebar.warning('Username does not exist, Please Sign up')
+                    menu(None, authentication_status, None)
 
-                response = requests.post(BACKEND_URI, files=files)
-
-                if response.status_code == 200:
-                    result = response.json()
-                    st.write("Species:", result["species"])
-                    # Assuming result["recommendations"] is a list of image paths
-                    image_paths = result["recommendations"]
-
-                    # Prepend the server URL to the image paths
-                    server_url = "http://localhost:8000/images/"
-                    full_image_urls = [server_url + path for path in image_paths]
-
-                    # Display the images
-                    st.image(full_image_urls)
-                else:
-                    st.error("Failed to receive a valid response.")
-
-                if st.button("Archive image", key=idx):
-                    archive_image_mongodb(temp_image_path, image_details, result=result.get("species"))
-                    st.success("Image archived successfully!")
-
-                st.success("File uploaded successfully!")
-
-            except Exception as e:
-                st.error(f"Error processing image: {str(e)}")
-            finally:
-                # Delete the temporary folder and its contents
-                shutil.rmtree(temp_folder, ignore_errors=True)
-            idx += 1
-
-
-def show_view_archive():
-    st.header("View archive")
-
-    archived_images = collection.find({})
-    for archived_image in archived_images:
-        st.image(BytesIO(archived_image["image"]), caption=f"Size - {archived_image['size in mb']} MB", use_column_width=True)
-        st.write(f"Flower Species: {archived_image['result']}")
-        if st.button(f"Delete Image - {archived_image['size in mb']} MB",
-                    key=archived_image['_id']):
-            delete_image_mongodb(archived_image['_id'])
-            st.success("Image deleted successfully!")
-            
-
-def archive_image_mongodb(temp_image_path, image_details, result=None):
-    with open(temp_image_path, "rb") as image_file:
-        image_bytes = image_file.read()
-    # image_bytes = image_to_bytes(image)
-    document = {
-        "size in mb": image_details["File Size in mb"],
-        "format": image_details["Format"],
-        "image": image_bytes,
-        "result": result,
-    }
-    collection.insert_one(document)
-
-
-def get_image_details(image_path):
-    size = os.path.getsize(image_path)  # Get file size in bytes
-    mb_size = str_to_mb(size)
-    image_format = imghdr.what(image_path)  # Get image format using imghdr
-    details = {
-        "File Size in mb": mb_size,
-        "Format": image_format,
-        # Add more details as needed
-    }
-    return details
-
-
-def str_to_mb(string_size):
-    bytes_size = int(string_size)
-    return bytes_to_mb(bytes_size)
-
-
-def bytes_to_mb(bytes_size):
-    return round(bytes_size / (1024 * 1024), 2)
-
-
-def delete_image_mongodb(image_id):
-    collection.delete_one({"_id": image_id})
+    except Exception as e:
+        # Handle the exception and print its output
+        print(f"An exception occurred: {e}")
 
 
 if __name__ == '__main__':
