@@ -6,9 +6,10 @@ import shutil
 import tempfile
 import pymongo
 from io import BytesIO
+import numpy as np 
 from dotenv import dotenv_values, load_dotenv
-
-
+from sklear.metrics.pairwise import cosine_similarity 
+from backend.machine_learning.util.pipeline import recommend
 load_dotenv()
 
 
@@ -68,21 +69,28 @@ def show_upload_archive():
                 if response.status_code == 200:
                     result = response.json()
                     st.write("Species:", result["species"])
-                    # Assuming result["recommendations"] is a list of image paths
-                    image_paths = result["recommendations"]
 
-                    # Prepend the server URL to the image paths
-                    server_url = "http://localhost:8000/images/"
-                    full_image_urls = [server_url + path for path in image_paths]
+                    recommendations = result.get("recommendations", {})
+                    if recommendations:
+                        st.write("Similar Products:")
+                        for image_path, similarity_score in recommendations.items():
+                            st.image(f"http://localhost:8000/{image_path}", caption=f"Similarity Score: {similarity_score}", use_column_width=True)
+                            st.write(f"Similarity Score: {similarity_score}")
 
-                    # Display the images
-                    st.image(full_image_urls)
+                        displayed_similarity_score = min(similarity_score for similarity_score in recommendations.values())
+                        if displayed_similarity_score >= 0.70:
+                            st.success(f"Similar products of {result['species']} flower species with minimum similarity score: {displayed_similarity_score}")
+                        elif displayed_similarity_score >= 0.50:
+                            st.info(f"We could not find similar products of this {result['species']}. But these might be what you are looking for.")
+                    else:
+                        st.info("No recommendations available.")
+
+                    if st.button("Archive image", key=idx):
+                        archive_image_mongodb(temp_image_path, image_details, result=result.get("species"))
+                        st.success("Image archived successfully!")
+
                 else:
-                    st.error("Failed to receive a valid response.")
-
-                if st.button("Archive image", key=idx):
-                    archive_image_mongodb(temp_image_path, image_details, result=result.get("species"))
-                    st.success("Image archived successfully!")
+                    st.error("S")
 
                 st.success("File uploaded successfully!")
 
@@ -92,6 +100,7 @@ def show_upload_archive():
                 # Delete the temporary folder and its contents
                 shutil.rmtree(temp_folder, ignore_errors=True)
             idx += 1
+
 
 
 def show_view_archive():
@@ -130,6 +139,23 @@ def get_image_details(image_path):
         # Add more details as needed
     }
     return details
+
+p
+def calculate_cosine_similarity(ref_feature_vector, recommendations, num_recommendations):
+    cosine_similarities = cosine_similarity(
+        [ref_feature_vector], 
+        recommendations.drop(['ImgPath', 'Class'], axis='columns')
+    )
+    
+    sorted_ref_cluster_indices = np.argsort(-cosine_similarities.flatten())
+    
+    if num_recommendations > len(sorted_ref_cluster_indices):
+        raise ValueError('Number of recommendations too large. Insufficient database size.')
+    
+    top_ref_cluster_indices = sorted_ref_cluster_indices[:num_recommendations]
+    recommended_items = recommendations.iloc[top_ref_cluster_indices]
+
+    return recommended_items
 
 
 def str_to_mb(string_size):
