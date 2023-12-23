@@ -140,12 +140,12 @@ def get_image_details(image_path):
     }
     return details
 
-p
+
 def calculate_cosine_similarity(ref_feature_vector, recommendations, num_recommendations):
     cosine_similarities = cosine_similarity(
         [ref_feature_vector], 
         recommendations.drop(['ImgPath', 'Class'], axis='columns')
-    )
+    ) # paste from pipeline and modify
     
     sorted_ref_cluster_indices = np.argsort(-cosine_similarities.flatten())
     
