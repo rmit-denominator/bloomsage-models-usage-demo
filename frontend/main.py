@@ -141,23 +141,6 @@ def get_image_details(image_path):
     return details
 
 
-def calculate_cosine_similarity(ref_feature_vector, recommendations, num_recommendations):
-    cosine_similarities = cosine_similarity(
-        [ref_feature_vector], 
-        recommendations.drop(['ImgPath', 'Class'], axis='columns')
-    ) # paste from pipeline and modify
-    
-    sorted_ref_cluster_indices = np.argsort(-cosine_similarities.flatten())
-    
-    if num_recommendations > len(sorted_ref_cluster_indices):
-        raise ValueError('Number of recommendations too large. Insufficient database size.')
-    
-    top_ref_cluster_indices = sorted_ref_cluster_indices[:num_recommendations]
-    recommended_items = recommendations.iloc[top_ref_cluster_indices]
-
-    return recommended_items
-
-
 def str_to_mb(string_size):
     bytes_size = int(string_size)
     return bytes_to_mb(bytes_size)
