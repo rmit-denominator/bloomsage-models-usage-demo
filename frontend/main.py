@@ -61,7 +61,7 @@ def main():
 
         if authentication_status is None:
             with info:
-                menu(None, authentication_status, None)
+                menu(None, authentication_status, None, None)
 
         if username:
             if username in usernames:
@@ -73,20 +73,20 @@ def main():
                     st.sidebar.subheader(f'Welcome {username}')
                     Authenticator.logout('Log Out', 'sidebar')
 
-                    menu(authenticated_user_email, authentication_status, placeholder)
+                    menu(authenticated_user_email, authentication_status, placeholder, username)
 
                 elif not authentication_status:
                     with info:
                         st.sidebar.error('Incorrect Password or username')
-                        menu(None, authentication_status, None)
+                        menu(None, authentication_status, None, None)
                 elif authentication_status is None:
                     with info:
                         st.sidebar.warning('Please feed in your credentials')
-                        menu(None, authentication_status, None)
+                        menu(None, authentication_status, None, None)
             else:
                 with info:
                     st.sidebar.warning('Username does not exist, Please Sign up')
-                    menu(None, authentication_status, None)
+                    menu(None, authentication_status, None, None)
 
     except Exception as e:
         # Handle the exception and print its output

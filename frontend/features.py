@@ -161,7 +161,7 @@ def sign_up():
             st.balloons()
 
 
-def menu(authenticated_user_email, authentication_status, placeholder):
+def menu(authenticated_user_email, authentication_status, placeholder, username):
     if not authentication_status:       
         st.sidebar.write("Do not have account?")
         option = st.sidebar.button("Sign Up")
@@ -171,17 +171,19 @@ def menu(authenticated_user_email, authentication_status, placeholder):
         menu = ["Home", "Upload & Archive", "View Archive"]
         option = st.sidebar.selectbox("Menu", menu)
         if option == "Home":
-            show_home(placeholder)
+            show_home(placeholder, username)
         elif option == "Upload & Archive":
             show_upload_archive(authenticated_user_email, placeholder)
         elif option == "View Archive":
             show_view_archive(authenticated_user_email, placeholder)
 
 
-def show_home(placeholder):
+def show_home(placeholder, username):
+    
     with placeholder:
-        st.header("Demo Upload and save image with streamlit, Use the navigation bar to select!")
-
+            st.header(f"Welcome to BloomSage, {username}!")
+    
+    st.link_button("Go to Our Ecommerce Website", "http://example.com")
 
 def show_upload_archive(authenticated_user_email, placeholder):
     with placeholder:
@@ -212,21 +214,71 @@ def show_upload_archive(authenticated_user_email, placeholder):
                 if response.status_code == 200:
                     result = response.json()
                     st.write("Species:", result["species"])
-                    # Assuming result["recommendations"] is a list of image paths
-                    image_paths = result["recommendations"]
 
-                    # Prepend the server URL to the image paths
-                    server_url = "http://localhost:8000/images/"
-                    full_image_urls = [server_url + path for path in image_paths]
+                    recommendations = result.get("recommendations", {})
+                    if recommendations:
+                        st.write("Similar Products:")
 
-                    # Display the images
-                    st.image(full_image_urls)
+                        # Create 5 columns for organizing the cards
+                        columns = st.columns(2)
+
+                        # Set a fixed height for each card
+                        card_height = "500px"
+
+                        for idx, (image_path, similarity_score) in enumerate(recommendations.items()):
+                            # Display each card in a column with some CSS styling
+                            with columns[idx % 2].container():
+                                st.markdown(
+                                    f"""
+                                    <style>
+                                        .card-container {{
+                                            border: 1px solid #ddd;
+                                            border-radius: 10px;
+                                            padding: 10px;
+                                            margin: 10px;
+                                            text-align: center;
+                                            height: {card_height};
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: space-between;
+                                        }}
+                                        .card-container img {{
+                                            max-width: 100%;
+                                            border-radius: 8px;
+                                            flex: 1; /* Make the image take up available space */
+                                        }}
+                                        .card-container p {{
+                                            margin-top: 8px;
+                                        }}
+                                        .card-container a {{
+                                            text-decoration: none;
+                                            color: #3498db;
+                                            font-weight: bold;
+                                        }}
+                                    </style>
+                                    <div class="card-container">
+                                        <h3>Product {idx + 1}</h3>
+                                        <img src="http://localhost:8000/images/{image_path}" alt="Product Image" height = 200px>
+                                        <p>Similarity Score: {similarity_score}</p>
+                                        <a href="http://example.com" target="_blank">View Details</a>
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True
+                                )
+
+                        displayed_similarity_score = min(similarity_score for similarity_score in recommendations.values())
+                        if displayed_similarity_score >= 0.70:
+                            st.success(f"Similar products of {result['species']} flower species with minimum similarity score: {displayed_similarity_score}")
+                        elif displayed_similarity_score >= 0.50:
+                            st.info(f"We could not find similar products of this {result['species']}. But these might be what you are looking for.")
+                    else:
+                        st.info("No recommendations available.")
+
+                    if st.button("Archive image", key=idx):
+                        archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, result=result.get("species"))
+                        st.success("Image archived successfully!")
                 else:
-                    st.error("Failed to receive a valid response.")
-
-                if st.button("Archive image", key=idx):
-                    archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, result=result.get("species")) # 
-                    st.success("Image archived successfully!")
+                    st.error("S")
 
                 st.success("File uploaded successfully!")
 
