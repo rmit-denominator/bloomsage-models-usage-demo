@@ -139,3 +139,13 @@ From the project root directory:
 After this, the backend server will be available on [http://localhost:8000](http://localhost:8000/), and the frontend server will be available on [http://localhost:8080](http://localhost:8080).
 
 Please refer to my code, as well as [FastAPI](https://fastapi.tiangolo.com/) and [Streamlit](https://docs.streamlit.io/) documentation for more information.
+
+### for flask frontend 
+- How to run : 
+  ```bash
+  python -m venv venv
+  venv/Script/activate
+  pip install -r ./requirements.txt
+  python app.py
+  deactivate
+  ```
