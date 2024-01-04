@@ -163,10 +163,8 @@ def sign_up():
 
 def menu(authenticated_user_email, authentication_status, placeholder, username):
     if not authentication_status:       
-        st.sidebar.write("Do not have account?")
-        option = st.sidebar.button("Sign Up")
-        if option:
-            sign_up()
+        st.write("If you have no account, please sign up!")
+        sign_up()
     else: 
         menu = ["Home", "Upload & Archive", "View Archive"]
         option = st.sidebar.selectbox("Menu", menu)
