@@ -1,4 +1,5 @@
 import os, sys
+import requests
 module_path = os.path.abspath(os.path.join('.'))
 if module_path not in sys.path:
     sys.path.append(module_path)
@@ -12,11 +13,10 @@ import uvicorn
 
 from machine_learning.pipeline import classify, recommend
 
-
 config = dotenv_values(".env")
 HOST = config["HOST"]
 PORT = int(config["PORT"])
-
+OPENAI_API_KEY = config["OPENAI_API_KEY"]
 
 app = FastAPI()
 
@@ -52,6 +52,20 @@ async def upload_image(image: UploadFile):
         "recommendations": recommendations
     }
 
+@app.post("/openai/")
+async def openai_endpoint():
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {OPENAI_API_KEY}"
+    }
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": "Say this is a test!"}],
+        "temperature": 0.7
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
