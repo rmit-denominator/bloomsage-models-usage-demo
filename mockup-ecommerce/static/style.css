@@ -1,0 +1,69 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #ffcccb;
+    padding: 1em;
+    text-align: center;
+}
+
+.logo img {
+    max-width: 100px; /* Increase the max-width to make the logo bigger */
+    margin-right: 10px;
+}
+
+#featured-products, #product-details {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+h2, h3 {
+    text-align: center;
+}
+.product-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.product-card, .product-detail {
+    flex: 0 0 calc(25% - 20px); /* Adjust the width of each item to 25% with margin */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    box-sizing: border-box; /* Include padding and border in item width calculation */
+}
+
+.product-card img, .product-detail img {
+    max-width: 100%;
+    height: auto;
+}
+
+.price {
+    color: #009688;
+    font-weight: bold;
+}
+
+a {
+    display: block;
+    margin-top: 10px;
+    background-color: #ffcccb;
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+footer {
+    background-color: #ffcccb;
+    text-align: center;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

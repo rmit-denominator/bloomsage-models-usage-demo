@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{{ product.name }} - BloomSage Flower Shop</title>
+    
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Your Flower Shop Logo">
+            <h1>BloomSage Flower Shop</h1>
+        </div>
+    </header>
+
+    <section id="product-details">
+        <div class="product-detail">
+            <img src="{{ url_for('static', filename=product['image']) }}" alt="{{ product['name'] }}">   
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p class="price">${{ product.price }}</p>
+            <a href="#">Add to Cart</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; BloomSage Flower Shop</p>
+    </footer>
+
+</body>
+</html>
