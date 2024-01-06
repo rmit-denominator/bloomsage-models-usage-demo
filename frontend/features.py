@@ -223,9 +223,9 @@ def show_upload_archive(authenticated_user_email, placeholder):
                         # Set a fixed height for each card
                         card_height = "500px"
 
-                        for idx, (image_path, similarity_score) in enumerate(recommendations.items()):
+                        for idx1, (image_path, similarity_score) in enumerate(recommendations.items()):
                             # Display each card in a column with some CSS styling
-                            with columns[idx % 2].container():
+                            with columns[idx1 % 2].container():
                                 st.markdown(
                                     f"""
                                     <style>
@@ -255,7 +255,7 @@ def show_upload_archive(authenticated_user_email, placeholder):
                                         }}
                                     </style>
                                     <div class="card-container">
-                                        <h3>Product {idx + 1}</h3>
+                                        <h3>Product {idx1 + 1}</h3>
                                         <img src="http://localhost:8000/images/{image_path}" alt="Product Image" height = 200px>
                                         <p>Similarity Score: {similarity_score}</p>
                                         <a href="http://example.com" target="_blank">View Details</a>
