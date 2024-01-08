@@ -126,13 +126,13 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   ```bash
   source .venv/bin/activate
   python ./app.py
-  deactivate
   ```
 - Windows Systems:
   ```bash
   python -m venv venv
   venv/Script/activate
   pip install -r ./requirements.txt
+  deactivate
   ```
   ```bash
   venv/Script/activate
