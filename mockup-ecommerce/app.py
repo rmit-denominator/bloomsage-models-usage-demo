@@ -73,9 +73,11 @@ def home():
 
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
-    # product = collection.find_one({"id": product_id})
-    product = {} 
-    return render_template('product_detail.html', product=product)
+    product = next((product for product in featured_products if product["id"] == product_id), None)
+    if product:
+        return render_template('product_detail.html', product=product)
+    else:
+        return "Product not found", 404
 
 if __name__ == '__main__':
     app.run(debug=True)
