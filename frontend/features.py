@@ -16,8 +16,8 @@ load_dotenv()
 
 
 config = dotenv_values(".env")
-BACKEND_URI = config["BACKEND"]
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 # Connect to MongoDB
@@ -207,11 +207,12 @@ def show_upload_archive(authenticated_user_email, placeholder):
 
                 files = {"image": uploaded_file}
 
-                response = requests.post(BACKEND_URI, files=files)
+                response = requests.post("http://localhost:8000/upload/", files=files)
 
                 if response.status_code == 200:
                     result = response.json()
-                    st.write("Species:", result["species"])
+                    species = result["species"]
+                    st.write("Species:", species)
 
                     recommendations = result.get("recommendations", {})
                     if recommendations:
@@ -272,13 +273,26 @@ def show_upload_archive(authenticated_user_email, placeholder):
                     else:
                         st.info("No recommendations available.")
 
+                    st.success("File uploaded successfully!")
+
                     if st.button("Archive image", key=idx):
                         archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, result=result.get("species"))
                         st.success("Image archived successfully!")
+                
+                    url = "https://api.openai.com/v1/chat/completions"
+                    headers = {
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {OPENAI_API_KEY}"
+                    }
+                    data = {
+                        "model": "gpt-3.5-turbo",
+                        "messages": [{"role": "user", "content": f"Say this is a {species}!"}],
+                        "temperature": 0.7
+                    }
+                    chatgpt_response = requests.post(url, headers=headers, json=data)
+                    st.write(chatgpt_response.json()['choices'][0]['message']['content'])
                 else:
                     st.error("S")
-
-                st.success("File uploaded successfully!")
 
             except Exception as e:
                 st.error(f"Error processing image: {str(e)}")

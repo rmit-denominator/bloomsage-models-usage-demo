@@ -12,15 +12,8 @@ from dotenv import dotenv_values, load_dotenv
 load_dotenv()
 
 # config = dotenv_values(".env")
-# BACKEND_URI = config["BACKEND"]
-# MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
 
 app = Flask(__name__)
-
-# Connect to MongoDB
-# client = pymongo.MongoClient(f"mongodb+srv://admin:{MONGODB_PASSWORD}@cluster0.zuy7zeb.mongodb.net/")
-# db = client["testdb"]
-# collection = db["test"]
 
 featured_products = [
     {"id": 1, "name": "Rose Bouquet", "description": "Beautiful arrangement of red roses.", "price": 29.99, "image": "imgs/000001.jpg"},

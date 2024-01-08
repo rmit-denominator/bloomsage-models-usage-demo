@@ -53,7 +53,7 @@ async def upload_image(image: UploadFile):
     }
 
 @app.post("/openai/")
-async def openai_endpoint():
+async def openai_endpoint(species: str):
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Content-Type": "application/json",
@@ -61,11 +61,11 @@ async def openai_endpoint():
     }
     data = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": "Say this is a test!"}],
+        "messages": [{"role": "user", "content": f"Say this is a {species}!"}],
         "temperature": 0.7
     }
     response = requests.post(url, headers=headers, json=data)
-    return response.json()
+    return {"chatgpt_response": response.json()['choices'][0]['message']['content']}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
