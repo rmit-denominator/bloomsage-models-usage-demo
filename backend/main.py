@@ -16,7 +16,7 @@ from machine_learning.pipeline import classify, recommend
 config = dotenv_values(".env")
 HOST = config["HOST"]
 PORT = int(config["PORT"])
-OPENAI_API_KEY = config["OPENAI_API_KEY"]
+# OPENAI_API_KEY = config["OPENAI_API_KEY"]
 
 app = FastAPI()
 

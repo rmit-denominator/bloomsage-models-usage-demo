@@ -17,7 +17,7 @@ load_dotenv()
 
 config = dotenv_values(".env")
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 # Connect to MongoDB
@@ -282,7 +282,7 @@ def show_upload_archive(authenticated_user_email, placeholder):
                     url = "https://api.openai.com/v1/chat/completions"
                     headers = {
                         "Content-Type": "application/json",
-                        "Authorization": f"Bearer {OPENAI_API_KEY}"
+                        "Authorization": f"Bearer {st.secrets.OPENAI_API_KEY}"
                     }
                     data = {
                         "model": "gpt-3.5-turbo",
