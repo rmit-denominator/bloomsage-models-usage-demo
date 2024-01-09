@@ -26,12 +26,22 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
     │   ├── requirements.txt
     │   ├── ml_fetch.py
     │   └── main.py
-    ├── frontend/
-    │   │   └── .streamlit/
-    │   │       └── config.toml
-    │   ├── .env
-    │   ├── requirements.txt
-    │   └── main.py
+    ├── frontend
+        ├── favicon
+        │   └── Logo_BloomSage Logomark.png
+        ├── features.py
+        ├── main.py
+        └── requirements.txt
+    ├── mockup-ecommerce
+        ├── app.py
+        ├── procfile
+        ├── requirements.txt
+        ├── static
+        │   ├── imgs
+        │   └── style.css
+        └── templates
+            ├── index.html
+            └── product_detail.html
     ├── .gitignore
     └── README.md
 
@@ -50,102 +60,83 @@ Clone this repository:
 git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
 ```
 
+***At the same time, open 3 terminal consoles to run 3 servers below***
 ### Setup Development Environment and fetch ML Assets (Compiled recommender database and trained models from [BloomSage ML Repository Latest Release](https://github.com/rmit-denominator/bloomsage-ml/releases/latest)):
 
-#### Backend Setup:
+#### Backend Setup `cd backend`:
 
-From the project root directory:
-
-- POSIX Systems:
+- UNIX/Linux:
   ```bash
-  cd backend
   python -m venv .venv
   source .venv/bin/activate
   pip install -r ./requirements.txt
   python ./ml_fetch.py
   deactivate
   ```
+  ```bash
+  source .venv/bin/activate
+  python ./main.py
+  ```
 - Windows Systems:
   ```bash
-  cd backend
   python -m venv venv
   venv/Script/activate
   pip install -r ./requirements.txt
   python ./ml_fetch.py
   deactivate
   ```
-
-#### Frontend Setup:
-
-From the project root directory:
-
-- POSIX Systems:
   ```bash
-  cd frontend
+  venv/Script/activate
+  python ./main.py
+  ```
+
+#### Frontend Setup `cd frontend`:
+
+- UNIX/Linux:
+  ```bash
   python -m venv .venv
   source .venv/bin/activate
   pip install -r ./requirements.txt
   deactivate
   ```
+  ```bash
+  source .venv/bin/activate
+  streamlit run ./main.py
+  ```
 - Windows Systems:
   ```bash
-  cd frontend
   python -m venv venv
   venv/Script/activate
   pip install -r ./requirements.txt
   deactivate
+  ```
+  ```bash
+  venv/Script/activate
+  streamlit run ./main.py
+  ```
+
+#### Mockup Ecommerce Setup `cd mockup-ecommerce`:
+- UNIX/Linux:
+  ```bash
+  python -m venv .venv
+  source .venv/bin/activate
+  pip install -r ./requirements.txt
+  deactivate
+  ```
+  ```bash
+  source .venv/bin/activate
+  python ./app.py
+  ```
+- Windows Systems:
+  ```bash
+  python -m venv venv
+  venv/Script/activate
+  pip install -r ./requirements.txt
+  deactivate
+  ```
+  ```bash
+  venv/Script/activate
+  python ./app.py
   ```
 
 Refer to `backend/requirements.txt` and `frontend/requirements.txt` for information on project dependencies.
-
-### Start Backend and Frontend servers as separate processes:
-
-**Tips:** Use two terminals.
-
-#### Backend:
-
-From the project root directory:
-
-- POSIX Systems:
-  ```bash
-  cd backend
-  source .venv/bin/activate
-  python ./main.py
-  ```
-- Windows Systems:
-  ```bash
-  cd backend
-  venv/Script/activate
-  python ./main.py
-  ```
-
-#### Frontend:
-
-From the project root directory:
-
-- POSIX Systems:
-  ```bash
-  cd frontend
-  source .venv/bin/activate
-  streamlit run ./main.py
-  ```
-- Windows Systems:
-  ```bash
-  cd frontend
-  venv/Script/activate
-  streamlit run ./main.py
-  ```
-
-After this, the backend server will be available on [http://localhost:8000](http://localhost:8000/), and the frontend server will be available on [http://localhost:8080](http://localhost:8080).
-
-Please refer to my code, as well as [FastAPI](https://fastapi.tiangolo.com/) and [Streamlit](https://docs.streamlit.io/) documentation for more information.
-
-### for flask frontend 
-- How to run : 
-  ```bash
-  python -m venv venv
-  venv/Script/activate
-  pip install -r ./requirements.txt
-  python app.py
-  deactivate
-  ```
