@@ -31,7 +31,7 @@ def main():
         st.markdown(
             f"""
             <div class="container">
-                <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}" width=150">
+                <img class="logo-img" src="" width=150">
                 <h1 class="logo-text">BloomSage</h1>
             </div>
             """,
