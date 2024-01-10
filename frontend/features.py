@@ -175,6 +175,29 @@ def menu(authenticated_user_email, authentication_status, placeholder, username)
         elif option == "View Archive":
             show_view_archive(authenticated_user_email, placeholder)
 
+def prompts(species):
+        prompt_1="What can I use this flower for?"
+        prompt_2="What are suitable occasion to use this flower?"
+        menu = [prompt_1, prompt_2, "Other questions?"]
+        option = st.selectbox("Recommendation Menu", menu)
+        if option == prompt_1:
+            prompt = prompt_1
+            chat_gpt_4(prompt, species)
+        elif option == prompt_2:
+            prompt = prompt_2
+            chat_gpt_4(prompt, species)
+        elif option == "Other questions?":
+            with st.form(key='other', clear_on_submit=True):
+                st.subheader('Ask your question here')
+                prompt = st.text_input(':blue[Other Questions with this flower species?]', placeholder='Enter Your Question')
+                # Additional variable to track the form submission
+                form_submitted = st.form_submit_button('Submit')   
+
+            if form_submitted:
+                st.success('Question Submitted!')
+                st.balloons()
+                chat_gpt_4(prompt, species)
+
 
 def show_home(placeholder, username):
     
@@ -278,22 +301,11 @@ def show_upload_archive(authenticated_user_email, placeholder):
                     if st.button("Archive image", key=idx):
                         archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, result=result.get("species"))
                         st.success("Image archived successfully!")
-                
-                    url = "https://api.openai.com/v1/chat/completions"
-                    headers = {
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {st.secrets.OPENAI_API_KEY}"
-                    }
-                    data = {
-                        "model": "gpt-3.5-turbo",
-                        "messages": [{"role": "user", "content": f"Say this is a {species}!"}],
-                        "temperature": 0.7
-                    }
-                    chatgpt_response = requests.post(url, headers=headers, json=data)
-                    st.write(chatgpt_response.json()['choices'][0]['message']['content'])
+                    
+                    prompts(species)
+
                 else:
                     st.error("S")
-
             except Exception as e:
                 st.error(f"Error processing image: {str(e)}")
             finally:
@@ -353,3 +365,18 @@ def bytes_to_mb(bytes_size):
 
 def delete_image_mongodb(image_id):
     collection_image.delete_one({"_id": image_id})
+
+
+def chat_gpt_4(prompt, species):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {st.secrets.OPENAI_API_KEY}"
+    }
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": f"{prompt} {species}!"}],
+        "temperature": 0.7
+    }
+    chatgpt_response = requests.post(url, headers=headers, json=data)
+    st.write(chatgpt_response.json()['choices'][0]['message']['content'])
