@@ -175,6 +175,33 @@ def menu(authenticated_user_email, authentication_status, placeholder, username)
         elif option == "View Archive":
             show_view_archive(authenticated_user_email, placeholder)
 
+def prompts(species):
+        prompt_1=f"What can I use {species} for?"
+        prompt_2=f"What are suitable occasion to use {species}?"
+        menu = [prompt_1, prompt_2, "Other questions?"]
+        st.header(f"Recommender System for {species}")
+        option = st.selectbox("Recommendation Menu", menu)
+        if option == prompt_1:
+            prompt = prompt_1
+    
+        elif option == prompt_2:
+            prompt = prompt_2
+    
+        elif option == "Other questions?":
+            with st.form(key='other', clear_on_submit=True):
+                st.subheader('Ask your question here')
+                prompt = st.text_input(f':blue[Other Questions with this {species}?]', placeholder='Enter Your Question')
+                # Additional variable to track the form submission
+                form_submitted = st.form_submit_button('Submit')   
+
+            if form_submitted:
+                st.success('Question Submitted!')
+                st.balloons()
+
+        prompt_gpt4 = chat_gpt_4(prompt, species)    
+        st.write(prompt_gpt4)
+        return prompt_gpt4
+
 
 def show_home(placeholder, username):
     
@@ -275,25 +302,14 @@ def show_upload_archive(authenticated_user_email, placeholder):
 
                     st.success("File uploaded successfully!")
 
+                    prompt_gpt4 = prompts(species)
+
                     if st.button("Archive image", key=idx):
-                        archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, result=result.get("species"))
+                        archive_image_mongodb(temp_image_path, authenticated_user_email, image_details, prompt_gpt4, result=result.get("species"))
                         st.success("Image archived successfully!")
-                
-                    url = "https://api.openai.com/v1/chat/completions"
-                    headers = {
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {st.secrets.OPENAI_API_KEY}"
-                    }
-                    data = {
-                        "model": "gpt-3.5-turbo",
-                        "messages": [{"role": "user", "content": f"Say this is a {species}!"}],
-                        "temperature": 0.7
-                    }
-                    chatgpt_response = requests.post(url, headers=headers, json=data)
-                    st.write(chatgpt_response.json()['choices'][0]['message']['content'])
+
                 else:
                     st.error("S")
-
             except Exception as e:
                 st.error(f"Error processing image: {str(e)}")
             finally:
@@ -308,15 +324,19 @@ def show_view_archive(authenticated_user_email, placeholder):
 
     archived_images = collection_image.find({"users_id": authenticated_user_email})
     for archived_image in archived_images:
+        print(archived_image.keys())
+
         st.image(BytesIO(archived_image["image"]), caption=f"Size - {archived_image['size in mb']} MB", use_column_width=True)
         st.write(f"Flower Species: {archived_image['result']}")
+        st.write(f"About {archived_image['result']}:")
+        st.write(f"{archived_image['prompt']}")
         if st.button(f"Delete Image - {archived_image['size in mb']} MB",
                     key=archived_image['_id']):
             delete_image_mongodb(archived_image['_id'])
             st.success("Image deleted successfully!")
             
 
-def archive_image_mongodb(temp_image_path,user_email, image_details, result=None):
+def archive_image_mongodb(temp_image_path, user_email, image_details, prompt_gpt4, result=None):
     with open(temp_image_path, "rb") as image_file:
         image_bytes = image_file.read()
     # image_bytes = image_to_bytes(image)
@@ -325,6 +345,7 @@ def archive_image_mongodb(temp_image_path,user_email, image_details, result=None
         "size in mb": image_details["File Size in mb"],
         "format": image_details["Format"],
         "image": image_bytes,
+        "prompt": prompt_gpt4,
         "result": result,
     }
     collection_image.insert_one(document)
@@ -353,3 +374,18 @@ def bytes_to_mb(bytes_size):
 
 def delete_image_mongodb(image_id):
     collection_image.delete_one({"_id": image_id})
+
+
+def chat_gpt_4(prompt, species):
+    url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {st.secrets.OPENAI_API_KEY}"
+    }
+    data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": f"{prompt} {species} flower species!"}],
+        "temperature": 0.7
+    }
+    chatgpt_response = requests.post(url, headers=headers, json=data)
+    return chatgpt_response.json()['choices'][0]['message']['content']
