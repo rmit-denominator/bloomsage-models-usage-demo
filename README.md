@@ -77,6 +77,10 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   source .venv/bin/activate
   python ./main.py
   ```
+Open another console for `ngrok`
+```bash
+ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:8000
+```
 - Windows Systems:
   ```bash
   python -m venv venv
@@ -89,7 +93,10 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   venv/Script/activate
   python ./main.py
   ```
-
+Open another console for `ngrok`
+```bash
+ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:8000
+```
 #### Frontend Setup `cd frontend`:
 **Demo**: https://bloomsage.streamlit.app/
 
