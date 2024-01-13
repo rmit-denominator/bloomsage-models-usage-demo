@@ -1,5 +1,6 @@
 import requests
 from flask import Flask, render_template
+from flask_frozen import Freezer
 import requests
 import os
 import imghdr
@@ -73,4 +74,4 @@ def product_detail(product_id):
         return "Product not found", 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    freezer.run(debug=True)

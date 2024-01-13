@@ -125,7 +125,7 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   ```
   ```bash
   source .venv/bin/activate
-  python ./app.py
+  flask --app app --debug run
   ```
 - Windows Systems:
   ```bash
@@ -136,7 +136,7 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   ```
   ```bash
   venv/Script/activate
-  python ./app.py
+  flask --app app --debug run
   ```
 
 Refer to `backend/requirements.txt` and `frontend/requirements.txt` for information on project dependencies.
