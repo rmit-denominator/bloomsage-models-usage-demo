@@ -64,7 +64,7 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
 ### Setup Development Environment and fetch ML Assets (Compiled recommender database and trained models from [BloomSage ML Repository Latest Release](https://github.com/rmit-denominator/bloomsage-ml/releases/latest)):
 
 #### Backend Setup `cd backend`:
-
+**Demo**: https://faithful-adequate-mudfish.ngrok-free.app/
 - UNIX/Linux:
   ```bash
   python -m venv .venv
