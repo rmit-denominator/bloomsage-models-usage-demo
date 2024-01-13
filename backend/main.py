@@ -21,6 +21,7 @@ PORT = int(config["PORT"])
 app = FastAPI()
 
 app.mount("/images", StaticFiles(directory="data/recommender-database"), name="images")
+app.mount("/logo", StaticFiles(directory="machine_learning/logo"), name="logo")
 
 @app.get("/")
 def read_root():

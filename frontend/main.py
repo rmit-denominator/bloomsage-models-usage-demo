@@ -31,7 +31,7 @@ def main():
         st.markdown(
             f"""
             <div class="container">
-                <img class="logo-img" src="" width=150">
+                <img class="logo-img" src='http://localhost:8000/logo/Logo_BloomSage.png' width=150">
                 <h1 class="logo-text">BloomSage</h1>
             </div>
             """,
