@@ -4,7 +4,7 @@ import base64
 from features import fetch_users, menu
 
 def main():
-    st.set_page_config(page_title='BloomSage', page_icon="favicon/Logo_BloomSage Logomark.png")
+    st.set_page_config(page_title='BloomSage', page_icon="favicon/Logo_BloomSage.png")
     LOGO_IMAGE = "favicon/Logo_BloomSage Logomark.png"
     placeholder = st.empty()
     with placeholder.container():

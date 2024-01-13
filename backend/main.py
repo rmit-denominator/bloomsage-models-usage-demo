@@ -18,7 +18,9 @@ HOST = config["HOST"]
 PORT = int(config["PORT"])
 # OPENAI_API_KEY = config["OPENAI_API_KEY"]
 
-app = FastAPI()
+app = FastAPI(
+    title="ML-BloomSage",
+)
 
 app.mount("/images", StaticFiles(directory="data/recommender-database"), name="images")
 app.mount("/logo", StaticFiles(directory="machine_learning/logo"), name="logo")
