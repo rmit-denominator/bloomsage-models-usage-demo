@@ -91,6 +91,7 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   ```
 
 #### Frontend Setup `cd frontend`:
+**Demo**: https://bloomsage.streamlit.app/
 
 - UNIX/Linux:
   ```bash
@@ -116,6 +117,7 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
   ```
 
 #### Mockup Ecommerce Setup `cd mockup-ecommerce`:
+**Demo**: https://bloomsage-mockup.netlify.app/
 - UNIX/Linux:
   ```bash
   python -m venv .venv
