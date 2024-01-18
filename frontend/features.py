@@ -10,33 +10,19 @@ import tempfile
 import pymongo
 from io import BytesIO
 from dotenv import dotenv_values, load_dotenv
-
+import base64
 
 load_dotenv()
-
 
 config = dotenv_values(".env")
 MONGODB_PASSWORD = os.getenv("MONGODB_PASSWORD")
 # OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
 
 # Connect to MongoDB
 client = pymongo.MongoClient(f"mongodb+srv://admin:{MONGODB_PASSWORD}@cluster0.zuy7zeb.mongodb.net/")
 db = client["Bloomsage"]
 collection_image = db['Image']
 collection_user = db['User']
-
-def insert_user(email, username, password):
-    """
-    Inserts Users into the DB
-    :param email:
-    :param username:
-    :param password:
-    :return User Upon successful Creation:
-    """
-    date_joined = str(datetime.datetime.now())
-
-    collection_user.insert_one({'key': email, 'username': username, 'password': password, 'date_joined': date_joined})
 
 
 def insert_user(email, username, password):
@@ -160,20 +146,42 @@ def sign_up():
             st.success('Account created successfully!!')
             st.balloons()
 
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/png;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
 
 def menu(authenticated_user_email, authentication_status, placeholder, username):
     if not authentication_status:       
-        st.write("If you have no account, please sign up!")
+        st.write("Sign up today to find your perfect flower match!")
         sign_up()
-    else: 
+        set_background("./favicon/flower_bg.jpg")
+    else:
         menu = ["Home", "Upload & Archive", "View Archive"]
         option = st.sidebar.selectbox("Menu", menu)
         if option == "Home":
             show_home(placeholder, username)
+            set_background("./favicon/flower_bg.jpg")
         elif option == "Upload & Archive":
             show_upload_archive(authenticated_user_email, placeholder)
+            set_background("./favicon/flower_bg.jpg")
         elif option == "View Archive":
             show_view_archive(authenticated_user_email, placeholder)
+            set_background("./favicon/flower_bg.jpg")
+
 
 def prompts(species):
         prompt_1=f"What can I use {species} for?"
@@ -206,7 +214,14 @@ def prompts(species):
 def show_home(placeholder, username):
     
     with placeholder:
-            st.header(f"Welcome to BloomSage, {username}!")
+            st.header(f"Welcome to BloomSage, :green[{username}]")
+
+    st.markdown(
+        """
+        <p><strong>What is BloomSage?</strong> Our product is an AI-powered floral classification, encyclopedia, and product recommendation system for enhancing modern online flower retailing platforms.</p>
+        """,
+        unsafe_allow_html=True
+    )
     
     st.link_button("Go to Our Ecommerce Website", "http://localhost:5000")
 

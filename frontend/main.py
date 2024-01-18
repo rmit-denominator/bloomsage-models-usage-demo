@@ -3,6 +3,7 @@ import streamlit_authenticator as stauth
 import base64
 from features import fetch_users, menu
 
+
 def main():
     st.set_page_config(page_title='BloomSage', page_icon="favicon/Logo_BloomSage.png")
     LOGO_IMAGE = "favicon/Logo_BloomSage Logomark.png"
@@ -31,13 +32,13 @@ def main():
         st.markdown(
             f"""
             <div class="container">
-                <img class="logo-img" src='https://faithful-adequate-mudfish.ngrok-free.app/logo/Logo_BloomSage.png' width=150">
+                <img class="logo-img" src='http://localhost:8000/logo/Logo_BloomSage.png' width=150">
                 <h1 class="logo-text">BloomSage</h1>
             </div>
             """,
             unsafe_allow_html=True
         )   
-        st.header("Welcome to our Application!👋")
+        st.header("Snap a flower, get a suggestion.")
     try:
         users = fetch_users()
         emails = []
@@ -70,7 +71,7 @@ def main():
                     # Retrieve the email of the authenticated user
                     authenticated_user_email = credentials['usernames'][username]['name']
                     
-                    st.sidebar.subheader(f'Welcome {username}')
+                    st.sidebar.subheader(f'Welcome back, :green[{username}]')
                     Authenticator.logout('Log Out', 'sidebar')
 
                     menu(authenticated_user_email, authentication_status, placeholder, username)

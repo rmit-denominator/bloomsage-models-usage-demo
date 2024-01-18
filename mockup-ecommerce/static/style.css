@@ -2,6 +2,9 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
@@ -11,37 +14,61 @@ header {
 }
 
 .logo img {
-    max-width: 100px; /* Increase the max-width to make the logo bigger */
+    max-width: 100px;
+    /* Increase the max-width to make the logo bigger */
     margin-right: 10px;
 }
 
-#featured-products, #product-details {
-    max-width: 1200px;
-    margin: 20px auto;
-}
-
-h2, h3 {
-    text-align: center;
-}
-.product-container {
+#featured-products .product-container {
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.product-card, .product-detail {
-    flex: 0 0 calc(25% - 20px); /* Adjust the width of each item to 25% with margin */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin: 10px;
-    text-align: center;
-    box-sizing: border-box; /* Include padding and border in item width calculation */
+#featured-products .product-card {
+    flex: 1 0 21%;
+    margin: 1%;
+    box-sizing: border-box;
 }
 
-.product-card img, .product-detail img {
-    max-width: 100%;
+#featured-products .product-card img {
+    width: 100%;
     height: auto;
+    object-fit: contain;
+    aspect-ratio: 1;
+}
+
+#product-details {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+#product-details .product-detail img {
+    max-width: 100px;
+    height: auto;
+    object-fit: contain;
+}
+
+#product-details .product-detail h2,
+.product-detail p {
+    margin: 20px 0;
+}
+
+#product-details .product-detail a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2e7bcf;
+    color: white;
+    text-decoration: none;
+}
+
+
+h2,
+h3 {
+    text-align: center;
 }
 
 .price {
@@ -61,9 +88,9 @@ a {
 
 footer {
     background-color: #ffcccb;
+    color: black;
     text-align: center;
     padding: 1em;
-    position: fixed;
-    bottom: 0;
     width: 100%;
+    margin-top: auto;
 }

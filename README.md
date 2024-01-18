@@ -109,7 +109,7 @@ ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:80
   ```
   ```bash
   source .venv/bin/activate
-  streamlit run ./main.py
+  streamlit run ./main.py --server.port 8081
   ```
 - Windows Systems:
   ```bash

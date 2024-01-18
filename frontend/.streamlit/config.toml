@@ -1,3 +1,13 @@
 [server]
 port = 8080
 headless = true
+runOnSave = true
+
+[theme]
+base = "dark"
+
+[client]
+toolbarMode = "viewer"
+
+[runner]
+fastReruns = true

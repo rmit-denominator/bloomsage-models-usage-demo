@@ -13,12 +13,16 @@
         <div class="logo">
             <img src="{{ url_for('static', filename='imgs/logoshop.png') }}" alt="Your Flower Shop Logo">
             <h1>BloomSage Flower Shop</h1>
+            <a href="http://172.26.57.9:8081/">
+                ← Go back to BloomSage Application
+            </a>
+            
         </div>
     </header>
-
+    
     <section id="product-details">
-        <div class="product-detail">
-            <img src="{{ url_for('static', filename=product['image']) }}" alt="{{ product['name'] }}">   
+        <img src="{{ url_for('static', filename=product['image']) }}" alt="{{ product['name'] }}">  
+        <div class="product-detail"> 
             <h2>{{ product.name }}</h2>
             <p>{{ product.description }}</p>
             <p class="price">${{ product.price }}</p>
@@ -27,7 +31,7 @@
     </section>
 
     <footer>
-        <p>&copy; BloomSage Flower Shop</p>
+        <p>&copy; BloomSage Flower Shop 2024</p>
     </footer>
 
 </body>
