@@ -27,21 +27,21 @@ I assume that you are proficient in using the terminal in both POSIX (Linux and 
     │   ├── ml_fetch.py
     │   └── main.py
     ├── frontend
-        ├── favicon
-        │   └── Logo_BloomSage Logomark.png
-        ├── features.py
-        ├── main.py
-        └── requirements.txt
+    │   ├── favicon
+    │   │   └── Logo_BloomSage Logomark.png
+    │   ├── features.py
+    │   ├── main.py
+    │   └── requirements.txt
     ├── mockup-ecommerce
-        ├── app.py
-        ├── procfile
-        ├── requirements.txt
-        ├── static
-        │   ├── imgs
-        │   └── style.css
-        └── templates
-            ├── index.html
-            └── product_detail.html
+    │   ├── app.py
+    │   ├── procfile
+    │   ├── requirements.txt
+    │   ├── static
+    │   │   ├── imgs
+    │   │   └── style.css
+    │   └── templates
+    │       ├── index.html
+    │       └── product_detail.html
     ├── .gitignore
     └── README.md
 
@@ -63,8 +63,11 @@ git clone https://github.com/rmit-denominator/bloomsage-models-usage-demo.git
 ***At the same time, open 3 terminal consoles to run 3 servers below***
 ### Setup Development Environment and fetch ML Assets (Compiled recommender database and trained models from [BloomSage ML Repository Latest Release](https://github.com/rmit-denominator/bloomsage-ml/releases/latest)):
 
+
 #### Backend Setup `cd backend`:
+
 **Demo**: https://faithful-adequate-mudfish.ngrok-free.app/
+
 - UNIX/Linux:
   ```bash
   python -m venv .venv
@@ -98,6 +101,7 @@ Open another console for `ngrok`
 ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:8000
 ```
 #### Frontend Setup `cd frontend`:
+
 **Demo**: https://bloomsage.streamlit.app/
 
 - UNIX/Linux:
@@ -124,7 +128,9 @@ ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:80
   ```
 
 #### Mockup Ecommerce Setup `cd mockup-ecommerce`:
+
 **Demo**: https://bloomsage-mockup.netlify.app/
+
 - UNIX/Linux:
   ```bash
   python -m venv .venv
@@ -148,4 +154,4 @@ ngrok tunnel --label edge=edghts_2atupyk74q8O638a0bdIkg9CPro http://localhost:80
   flask --app app --debug run
   ```
 
-Refer to `backend/requirements.txt` and `frontend/requirements.txt` for information on project dependencies.
+Refer to `backend/requirements.txt`, `frontend/requirements.txt`, `mockup-ecommerce/requirements.txt` for information on project dependencies.
