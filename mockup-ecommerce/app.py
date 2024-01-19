@@ -74,4 +74,4 @@ def product_detail(product_id):
         return "Product not found", 404
 
 if __name__ == '__main__':
-    freezer.run(debug=True)
+    app.run(debug=True)
