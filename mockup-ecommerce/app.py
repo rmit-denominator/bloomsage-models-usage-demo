@@ -65,7 +65,7 @@ product_detail20 = {"id": 20, "name": "Mixed Bouquet", "description": "Mixed bou
 def home():
     return render_template('index.html', featured_products=featured_products)
 
-@app.route('/product/<int:product_id>')
+@app.route('/product/<int:product_id>.html')
 def product_detail(product_id):
     product = next((product for product in featured_products if product["id"] == product_id), None)
     if product:
