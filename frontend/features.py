@@ -223,7 +223,7 @@ def show_home(placeholder, username):
         unsafe_allow_html=True
     )
     
-    st.link_button("Go to Our Ecommerce Website", "http://localhost:5000")
+    st.link_button("Go to Our Ecommerce Website", "https://bloomsage-mockup.netlify.app/")
 
 def show_upload_archive(authenticated_user_email, placeholder):
     with placeholder:
@@ -301,7 +301,7 @@ def show_upload_archive(authenticated_user_email, placeholder):
                                         <h3>Product {idx1 + 1}</h3>
                                         <img src="http://localhost:8000/images/{image_path}" alt="Product Image" height = 200px>
                                         <p>Similarity Score: {similarity_score}</p>
-                                        <a href="http://localhost:5000" target="_blank">View Details</a>
+                                        <a href="https://bloomsage-mockup.netlify.app/" target="_blank">View Details</a>
                                     </div>
                                     """,
                                     unsafe_allow_html=True
